@@ -11,7 +11,8 @@ connection_string = args.connect
 
 
 print("Connection to the vehicle on %s"%connection_string)
-vehicle = connect(connection_string, wait_ready=True)
+vehicle = connect('/dev/ttyTHS1', wait_ready=True, baud=57600)###change the connection port, baud to 57600 from
+##http://brisbaneroboticsclub.id.au/connect-nvidia-nano-to-pixhawk/?fbclid=IwAR10RIltSPqvx2JoIbTP39x1BmM50uF4MfvaxGvon3VGycGR41OOXe2-j2s
 
 #-- Define the function for takeoff
 def arm_and_takeoff(tgt_altitude):

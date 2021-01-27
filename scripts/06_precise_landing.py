@@ -7,8 +7,8 @@ sudo pip uninstall pymavlink
 cd dronekit-python
 git pull
 
-sudo python setup.py build
-sudo python setup.py install
+sudo python3 setup.py build
+sudo python3 setup.py install
 
 Be sure the RASPI CAMERA driver is correctly acivated -> type the following
 modprobe bcm2835-v4l2 
@@ -112,9 +112,9 @@ land_speed_cms      = 30.0
 #--- Get the camera calibration path
 # Find full directory path of this script, used for loading config and other files
 cwd                 = path.dirname(path.abspath(__file__))
-calib_path          = cwd+"/../opencv/"
-camera_matrix       = np.loadtxt(calib_path+'cameraMatrix_raspi.txt', delimiter=',')
-camera_distortion   = np.loadtxt(calib_path+'cameraDistortion_raspi.txt', delimiter=',')                                      
+calib_path          = cwd+"/../opencv/camera_01/"
+camera_matrix       = np.loadtxt(calib_path+'cameraMatrix.txt', delimiter=',')
+camera_distortion   = np.loadtxt(calib_path+'cameraDistortion.txt', delimiter=',')                                      
 aruco_tracker       = ArucoSingleTracker(id_to_find=id_to_find, marker_size=marker_size, show_video=False, 
                 camera_matrix=camera_matrix, camera_distortion=camera_distortion)
                 
