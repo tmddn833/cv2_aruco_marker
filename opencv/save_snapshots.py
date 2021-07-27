@@ -62,7 +62,13 @@ def save_snaps(width=0, height=0, name="snapshot", folder=".", raspi=False):
     if raspi:
         os.system('sudo modprobe bcm2835-v4l2')
 
-    cap = cv2.VideoCapture(gstreamer_pipeline(flip_method=0), cv2.CAP_GSTREAMER)
+    # # if jetson nano
+    # cap = cv2.VideoCapture(gstreamer_pipeline(flip_method=0), cv2.CAP_GSTREAMER)
+    # # if wabcam in desktop or laptop
+    # cap = cv2.VideoCapture(0)
+    # jetson javier
+    cap = cv2.VideoCapture("nvarguscamerasrc ! video/x-raw(memory:NVMM), width=3280, height=2464, format=(string)NV12, framerate=30/1 !  nvvidconv flip-method=0 ! video/x-raw, width=820, height=616, format=(string)BGRx ! videoconvert ! video/x-raw, format=(string)BGR ! appsink",cv2.CAP_GSTREAMER)
+
     if width > 0 and height > 0:
         print("Setting the custom Width and Height")
         print(cap.isOpened())
