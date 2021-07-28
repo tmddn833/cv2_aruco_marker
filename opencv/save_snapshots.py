@@ -67,8 +67,8 @@ def save_snaps(width=0, height=0, name="snapshot", folder=".", raspi=False):
     # # if wabcam in desktop or laptop
     # cap = cv2.VideoCapture(0)
     # jetson javier
-    cap = cv2.VideoCapture("nvarguscamerasrc ! video/x-raw(memory:NVMM), width=3280, height=2464, format=(string)NV12, framerate=30/1 !  nvvidconv flip-method=0 ! video/x-raw, width=820, height=616, format=(string)BGRx ! videoconvert ! video/x-raw, format=(string)BGR ! appsink",cv2.CAP_GSTREAMER)
-
+    # cap = cv2.VideoCapture("nvarguscamerasrc ! video/x-raw(memory:NVMM), width=1920, height=1080, format=(string)NV12, framerate=30/1 !  nvvidconv flip-method=0 ! video/x-raw, width=1920, height=1080, format=(string)BGRx ! videoconvert ! video/x-raw, format=(string)BGR ! appsink",cv2.CAP_GSTREAMER)
+    cap = cv2.VideoCapture(gstreamer_pipeline(flip_method=0, capture_width= 1920, capture_height= 1080, display_width = 1920, display_height=1080, framerate= 30), cv2.CAP_GSTREAMER)
     if width > 0 and height > 0:
         print("Setting the custom Width and Height")
         print(cap.isOpened())
@@ -92,17 +92,20 @@ def save_snaps(width=0, height=0, name="snapshot", folder=".", raspi=False):
     h       = cap.get(cv2.CAP_PROP_FRAME_HEIGHT)
 
     fileName    = "%s/%s_%d_%d_" %(folder, name, w, h)
+    i=0
+    key = 0
     while True:
+        i +=1
         ret, frame = cap.read()
 
         cv2.imshow('camera', frame)
-
         key = cv2.waitKey(1) & 0xFF
+        #time.sleep(0.1)
         if key == ord('q'):
             break
         if key == ord(' '):
             print("Saving image ", nSnap)
-            cv2.imwrite("%s%d.jpg"%(fileName, nSnap), frame)
+            cv2.imwrite("arducam/%s%d.jpg"%(fileName, nSnap), frame)
             nSnap += 1
 
     cap.release()
