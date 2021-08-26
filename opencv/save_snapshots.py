@@ -63,12 +63,12 @@ def save_snaps(width=0, height=0, name="snapshot", folder=".", raspi=False):
         os.system('sudo modprobe bcm2835-v4l2')
 
     # # if jetson nano
-    # cap = cv2.VideoCapture(gstreamer_pipeline(flip_method=0), cv2.CAP_GSTREAMER)
+    cap = cv2.VideoCapture(gstreamer_pipeline(flip_method=2), cv2.CAP_GSTREAMER)
     # # if wabcam in desktop or laptop
     # cap = cv2.VideoCapture(0)
     # jetson javier
     # cap = cv2.VideoCapture("nvarguscamerasrc ! video/x-raw(memory:NVMM), width=1920, height=1080, format=(string)NV12, framerate=30/1 !  nvvidconv flip-method=0 ! video/x-raw, width=1920, height=1080, format=(string)BGRx ! videoconvert ! video/x-raw, format=(string)BGR ! appsink",cv2.CAP_GSTREAMER)
-    cap = cv2.VideoCapture(gstreamer_pipeline(flip_method=0, capture_width= 1920, capture_height= 1080, display_width = 1920, display_height=1080, framerate= 30), cv2.CAP_GSTREAMER)
+    # cap = cv2.VideoCapture(gstreamer_pipeline(flip_method=0, capture_width= 1920, capture_height= 1080, display_width = 1920, display_height=1080, framerate= 30), cv2.CAP_GSTREAMER)
     if width > 0 and height > 0:
         print("Setting the custom Width and Height")
         print(cap.isOpened())
@@ -105,7 +105,8 @@ def save_snaps(width=0, height=0, name="snapshot", folder=".", raspi=False):
             break
         if key == ord(' '):
             print("Saving image ", nSnap)
-            cv2.imwrite("arducam/%s%d.jpg"%(fileName, nSnap), frame)
+            print(fileName)
+            cv2.imwrite("%s%d.jpg"%(fileName, nSnap), frame)
             nSnap += 1
 
     cap.release()
@@ -131,7 +132,7 @@ def main():
     parser.add_argument("--raspi", default=False, type=bool, help="<bool> True if using a raspberry Pi")
     args = parser.parse_args()
 
-    SAVE_FOLDER = args.folder
+    SAVE_FOLDER = str(args.folder)
     FILE_NAME = args.name
     FRAME_WIDTH = args.dwidth
     FRAME_HEIGHT = args.dheight
