@@ -22,7 +22,7 @@ import argparse
 #---------------------- SET THE PARAMETERS
 nRows = 9
 nCols = 6
-dimension = 25 #- mm
+dimension = 27 #- mm
 
 workingFolder   = "./camera_01"
 imageType       = 'jpg'
