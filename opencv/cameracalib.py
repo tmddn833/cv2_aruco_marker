@@ -22,9 +22,8 @@ import argparse
 #---------------------- SET THE PARAMETERS
 nRows = 9
 nCols = 6
-dimension = 27 #- mm
-
-workingFolder   = "./camera_01"
+dimension = 26 #- mm
+workingFolder   = "."
 imageType       = 'jpg'
 #------------------------------------------
 
@@ -39,26 +38,28 @@ objp[:,:2] = np.mgrid[0:nCols,0:nRows].T.reshape(-1,2)
 objpoints = [] # 3d point in real world space
 imgpoints = [] # 2d points in image plane.
 
-if len(sys.argv) < 6:
-        print("\n Not enough inputs are provided. Using the default values.\n\n" \
-              " type -h for help")
-else:
-    workingFolder   = sys.argv[1]
-    imageType       = sys.argv[2]
-    nRows           = int(sys.argv[3])
-    nCols           = int(sys.argv[4])
-    dimension       = float(sys.argv[5])
 
-if '-h' in sys.argv or '--h' in sys.argv:
-    print("\n IMAGE CALIBRATION GIVEN A SET OF IMAGES")
-    print(" call: python cameracalib.py <folder> <image type> <num rows (9)> <num cols (6)> <cell dimension (25)>")
-    print("\n The script will look for every image in the provided folder and will show the pattern found." \
+
+# ----------- PARSE THE INPUTS -----------------
+parser = argparse.ArgumentParser(
+    description="IMAGE CALIBRATION GIVEN A SET OF IMAGES \
+         \n The script will look for every image in the provided folder and will show the pattern found." \
           " User can skip the image pressing ESC or accepting the image with RETURN. " \
           " At the end the end the following files are created:" \
           "  - cameraDistortion.txt" \
           "  - cameraMatrix.txt \n\n")
+parser.add_argument("--folder", default=workingFolder, type=str, help="Path to the image folder (default: current)")
+parser.add_argument("--imageType", default=imageType, type=str, help="<width> px (default the camera output)")
+parser.add_argument("--dimension", default=dimension, type=int, help="<width> px (default the camera output)")
+parser.add_argument("--nRows", default=nRows, type=int, help="number of chessboard rows")
+parser.add_argument("--nCols", default=nCols, type=int, help="number of chessboard cols")
+args = parser.parse_args()
 
-    sys.exit()
+workingFolder   = args.folder
+imageType       = args.imageType
+nRows           = args.nRows
+nCols           = args.nCols
+dimension       = args.imageType
 
 # Find the images files
 filename    = workingFolder + "/*." + imageType
@@ -68,9 +69,6 @@ print(len(images))
 if len(images) < 9:
     print("Not enough images were found: at least 9 shall be provided!!!")
     sys.exit()
-
-
-
 else:
     nPatternFound = 0
     imgNotGood = images[1]
@@ -110,7 +108,6 @@ else:
             # cv2.waitKey(0)
         else:
             imgNotGood = fname
-
 
 cv2.destroyAllWindows()
 

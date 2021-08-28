@@ -63,12 +63,12 @@ def save_snaps(width=0, height=0, name="snapshot", folder=".", raspi=False):
         os.system('sudo modprobe bcm2835-v4l2')
 
     # # if jetson nano
-    # cap = cv2.VideoCapture(gstreamer_pipeline(flip_method=0), cv2.CAP_GSTREAMER)
+    cap = cv2.VideoCapture(gstreamer_pipeline(flip_method=2), cv2.CAP_GSTREAMER)
     # # if wabcam in desktop or laptop
     cap = cv2.VideoCapture(0)
     # jetson javier
-    # cap = cv2.VideoCapture("nvarguscamerasrc ! video/x-raw(memory:NVMM), width=3280, height=2464, format=(string)NV12, framerate=30/1 !  nvvidconv flip-method=0 ! video/x-raw, width=820, height=616, format=(string)BGRx ! videoconvert ! video/x-raw, format=(string)BGR ! appsink",cv2.CAP_GSTREAMER)
-
+    # cap = cv2.VideoCapture("nvarguscamerasrc ! video/x-raw(memory:NVMM), width=1920, height=1080, format=(string)NV12, framerate=30/1 !  nvvidconv flip-method=0 ! video/x-raw, width=1920, height=1080, format=(string)BGRx ! videoconvert ! video/x-raw, format=(string)BGR ! appsink",cv2.CAP_GSTREAMER)
+    # cap = cv2.VideoCapture(gstreamer_pipeline(flip_method=0, capture_width= 1920, capture_height= 1080, display_width = 1920, display_height=1080, framerate= 30), cv2.CAP_GSTREAMER)
     if width > 0 and height > 0:
         print("Setting the custom Width and Height")
         print(cap.isOpened())
@@ -78,8 +78,10 @@ def save_snaps(width=0, height=0, name="snapshot", folder=".", raspi=False):
     try:
         if not os.path.exists(folder):
             os.makedirs(folder)
+            print(folder)
             # ----------- CREATE THE FOLDER -----------------
-            folder = os.path.dirname(folder)
+            # folder = os.path.dirname(folder)
+            print(folder)
             try:
                 os.stat(folder)
             except:
@@ -92,16 +94,19 @@ def save_snaps(width=0, height=0, name="snapshot", folder=".", raspi=False):
     h       = cap.get(cv2.CAP_PROP_FRAME_HEIGHT)
 
     fileName    = "%s/%s_%d_%d_" %(folder, name, w, h)
+    i=0
+    key = 0
     while True:
+        i +=1
         ret, frame = cap.read()
 
         cv2.imshow('camera', frame)
-
         key = cv2.waitKey(1) & 0xFF
+        #time.sleep(0.1)
         if key == ord('q'):
             break
         if key == ord(' '):
-            print("Saving image ", nSnap)
+            print("Saving image : ", nSnap, " Saving dir : %s%d.jpg"%(fileName, nSnap))
             cv2.imwrite("%s%d.jpg"%(fileName, nSnap), frame)
             nSnap += 1
 
@@ -121,7 +126,7 @@ def main():
     # ----------- PARSE THE INPUTS -----------------
     parser = argparse.ArgumentParser(
         description="Saves snapshot from the camera. \n q to quit \n spacebar to save the snapshot")
-    parser.add_argument("--folder", default=SAVE_FOLDER, help="Path to the save folder (default: current)")
+    parser.add_argument("--folder", default=SAVE_FOLDER, type=str, help="Path to the save folder (default: current)")
     parser.add_argument("--name", default=FILE_NAME, help="Picture file name (default: snapshot)")
     parser.add_argument("--dwidth", default=FRAME_WIDTH, type=int, help="<width> px (default the camera output)")
     parser.add_argument("--dheight", default=FRAME_HEIGHT, type=int, help="<height> px (default the camera output)")
@@ -129,12 +134,12 @@ def main():
     args = parser.parse_args()
 
     SAVE_FOLDER = args.folder
+    # print("SAVE_FOLDER: " , SAVE_FOLDER)
     FILE_NAME = args.name
     FRAME_WIDTH = args.dwidth
     FRAME_HEIGHT = args.dheight
 
-
-    save_snaps(width=args.dwidth, height=args.dheight, name=args.name, folder=args.folder, raspi=args.raspi)
+    save_snaps(width=FRAME_WIDTH, height=FRAME_HEIGHT, name=FILE_NAME, folder=SAVE_FOLDER, raspi=args.raspi)
 
     print("Files saved")
 

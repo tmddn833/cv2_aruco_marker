@@ -2,3 +2,5 @@ mav.parm
 mav.tlog
 mav.tlog.raw
 *.pyc
+snapshot*.jpg
+cali*.png
