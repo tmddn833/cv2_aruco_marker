@@ -24,8 +24,8 @@ __author__ = "Tiziano Fiorenzani"
 __date__ = "01/06/2018"
 
 def gstreamer_pipeline(
-    capture_width=1280,
-    capture_height=720,
+    capture_width=1920,
+    capture_height=1080,
     display_width=1280,
     display_height=720,
     framerate=60,
@@ -138,7 +138,7 @@ def main():
     FRAME_HEIGHT = args.dheight
 
 
-    save_snaps(width=args.dwidth, height=args.dheight, name=args.name, folder=args.folder, raspi=args.raspi)
+    save_snaps(width=args.dwidth, height=args.dheight, name=args.name, folder=SAVE_FOLDER, raspi=args.raspi)
 
     print("Files saved")
 
