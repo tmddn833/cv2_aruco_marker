@@ -24,11 +24,11 @@ __author__ = "Tiziano Fiorenzani"
 __date__ = "01/06/2018"
 
 def gstreamer_pipeline(
-    capture_width=1920,
-    capture_height=1080,
-    display_width=1280,
-    display_height=720,
-    framerate=60,
+    capture_width=3840,
+    capture_height=2160,
+    display_width=956,
+    display_height=540,
+    framerate=21,
     flip_method=0,
     
     # capture_width=3264,
@@ -65,7 +65,7 @@ def save_snaps(width=0, height=0, name="snapshot", folder=".", raspi=False):
     # # if jetson nano
     cap = cv2.VideoCapture(gstreamer_pipeline(flip_method=2), cv2.CAP_GSTREAMER)
     # # if wabcam in desktop or laptop
-    cap = cv2.VideoCapture(0)
+    # cap = cv2.VideoCapture(0)
     # jetson javier
     # cap = cv2.VideoCapture("nvarguscamerasrc ! video/x-raw(memory:NVMM), width=1920, height=1080, format=(string)NV12, framerate=30/1 !  nvvidconv flip-method=0 ! video/x-raw, width=1920, height=1080, format=(string)BGRx ! videoconvert ! video/x-raw, format=(string)BGR ! appsink",cv2.CAP_GSTREAMER)
     # cap = cv2.VideoCapture(gstreamer_pipeline(flip_method=0, capture_width= 1920, capture_height= 1080, display_width = 1920, display_height=1080, framerate= 30), cv2.CAP_GSTREAMER)
