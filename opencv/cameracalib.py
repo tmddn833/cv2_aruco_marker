@@ -65,7 +65,7 @@ dimension       = args.imageType
 filename    = workingFolder + "/*." + imageType
 images      = glob.glob(filename)
 
-print(len(images))
+print(len(images), 'files detected')
 if len(images) < 9:
     print("Not enough images were found: at least 9 shall be provided!!!")
     sys.exit()
