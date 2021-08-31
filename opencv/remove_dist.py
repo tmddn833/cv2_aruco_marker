@@ -25,7 +25,7 @@ mapx_ = mapx_test-mapx
 
 mapy_ = mapy_test-mapy
 
-plt.imshow(mapx)
+plt.imshow(mapy_)
 plt.show()
 
 # cv2.imshow('mapx',mapx_)
